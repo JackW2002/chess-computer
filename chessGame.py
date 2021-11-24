@@ -1,83 +1,88 @@
 from pieces import *
 
+class chessGame():
 
-# Loads a board with the given FEN string
-def loadPos(fen: str):
-    board = [
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-    ]
+    def __init__(self):
+        self.p1_win = False
+        self.p2_win = False
+        self.board = []
 
-    column = 0
-    row = 0
-    for x in fen:
-        if x == "q":
-            board[row][column] = Queen("b")
+    # Loads a board with the given FEN string
+    def loadPos(self, fen: str):
+        board = [
+            [None, None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None, None],
+        ]
 
-        if x == "Q":
-            board[row][column] = Queen("w")
+        column = 0
+        row = 0
+        for x in fen:
+            if x == "q":
+                board[row][column] = Queen("b")
 
-        if x == "b":
-            board[row][column] = Bishop("b")
+            if x == "Q":
+                board[row][column] = Queen("w")
 
-        if x == "B":
-            board[row][column] = Bishop("w")
+            if x == "b":
+                board[row][column] = Bishop("b")
 
-        if x == "n":
-            board[row][column] = Knight("b")
+            if x == "B":
+                board[row][column] = Bishop("w")
 
-        if x == "N":
-            board[row][column] = Knight("w")
+            if x == "n":
+                board[row][column] = Knight("b")
 
-        if x == "k":
-            board[row][column] = King("b")
+            if x == "N":
+                board[row][column] = Knight("w")
 
-        if x == "K":
-            board[row][column] = King("w")
+            if x == "k":
+                board[row][column] = King("b")
 
-        if x == "p":
-            board[row][column] = Pawn("b")
+            if x == "K":
+                board[row][column] = King("w")
 
-        if x == "P":
-            board[row][column] = Pawn("w")
+            if x == "p":
+                board[row][column] = Pawn("b")
 
-        if x == "r":
-            board[row][column] = Rook("b")
+            if x == "P":
+                board[row][column] = Pawn("w")
 
-        if x == "R":
-            board[row][column] = Rook("w")
+            if x == "r":
+                board[row][column] = Rook("b")
 
-        if x.isnumeric():
-            column += int(x)
-            continue
+            if x == "R":
+                board[row][column] = Rook("w")
 
-        column += 1
+            if x.isnumeric():
+                column += int(x)
+                continue
 
-        if x == "/":
-            row += 1
-            column = 0
+            column += 1
 
-    return board
+            if x == "/":
+                row += 1
+                column = 0
+                
+        self.board = board
 
+    # Prints chess board to user
+    def showBoard(self):
+        board_view = "-------------------------------\n"
+        for x in self.board:
+            for y in x:
+                if y:
+                    board_view += " " + y.icon + " "
+                else:
+                    board_view += " • "
+            board_view += "\n"
+        return board_view
 
-# Prints chess board to user
-def showBoard(board):
-    board_view = "-------------------------------\n"
-    for x in board:
-        for y in x:
-            if y:
-                board_view += " " + y.icon + " "
-            else:
-                board_view += " • "
-        board_view += "\n"
-    return board_view
-
-
-board = loadPos("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
-print(showBoard(board))
+game = chessGame()
+game.loadPos('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
+print(game.showBoard())

@@ -54,6 +54,7 @@ class King(Piece):
             self.icon = "♔"
         else:
             self.icon = "♛"
+        self.canCastle = True
 
     def move(self):
         pass
