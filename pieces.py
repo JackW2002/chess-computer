@@ -7,9 +7,6 @@ class Piece(ABC):
     def move(self):
         pass
 
-    @abstractmethod
-    def genMoves(self):
-        pass
 
 
 class Colour(Enum):
@@ -28,8 +25,6 @@ class Queen(Piece):
     def move(self):
         pass
 
-    def genMoves(self):
-        pass
 
 
 class Rook(Piece):
@@ -41,9 +36,6 @@ class Rook(Piece):
             self.icon = "♜"
 
     def move(self):
-        pass
-
-    def genMoves(self):
         pass
 
 
@@ -59,8 +51,6 @@ class King(Piece):
     def move(self):
         pass
 
-    def genMoves(self):
-        pass
 
 
 class Pawn(Piece):
@@ -74,8 +64,6 @@ class Pawn(Piece):
     def move(self):
         pass
 
-    def genMoves(self):
-        pass
 
 
 class Knight(Piece):
@@ -100,6 +88,9 @@ class Bishop(Piece):
             self.icon = "♗"
         else:
             self.icon = "♝"
+    def __str__(self):
+        return()
+    
 
     def move(self):
         pass
