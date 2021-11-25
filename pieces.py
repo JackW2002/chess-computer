@@ -8,7 +8,6 @@ class Piece(ABC):
         pass
 
 
-
 class Colour(Enum):
     WHITE = 0
     BLACK = 1
@@ -17,23 +16,24 @@ class Colour(Enum):
 class Queen(Piece):
     def __init__(self, colour):
         self.colour = colour
+
+    def __str__(self):
         if self.colour == "w":
-            self.icon = "♕"
-        else:
-            self.icon = "♛"
+            return "♕"
+        return "♛"
 
     def move(self):
         pass
 
 
-
 class Rook(Piece):
     def __init__(self, colour):
         self.colour = colour
+
+    def __str__(self):
         if self.colour == "w":
-            self.icon = "♖"
-        else:
-            self.icon = "♜"
+            return "♖"
+        return "♜"
 
     def move(self):
         pass
@@ -42,58 +42,50 @@ class Rook(Piece):
 class King(Piece):
     def __init__(self, colour):
         self.colour = colour
+
+    def __str__(self):
         if self.colour == "w":
-            self.icon = "♔"
-        else:
-            self.icon = "♛"
-        self.canCastle = True
+            return "♔"
+        return "♚"
 
     def move(self):
         pass
-
 
 
 class Pawn(Piece):
     def __init__(self, colour):
         self.colour = colour
+
+    def __str__(self):
         if self.colour == "w":
-            self.icon = "♙"
-        else:
-            self.icon = "♟︎"
+            return "♙"
+        return "♟︎"
 
     def move(self):
         pass
-
 
 
 class Knight(Piece):
     def __init__(self, colour):
         self.colour = colour
+
+    def __str__(self):
         if self.colour == "w":
-            self.icon = "♘"
-        else:
-            self.icon = "♞"
+            return "♘"
+        return "♞"
 
     def move(self):
-        pass
-
-    def genMoves(self):
         pass
 
 
 class Bishop(Piece):
     def __init__(self, colour):
         self.colour = colour
-        if self.colour == "w":
-            self.icon = "♗"
-        else:
-            self.icon = "♝"
+
     def __str__(self):
-        return()
-    
+        if self.colour == "w":
+            return "♗"
+        return "♝"
 
     def move(self):
-        pass
-
-    def genMoves(self):
         pass
