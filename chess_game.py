@@ -1,5 +1,5 @@
 from pieces import *
-
+import copy
 
 class chessGame:
     def __init__(self):
@@ -52,7 +52,10 @@ class chessGame:
                 column = 0
                 continue
 
-            board[row][column] = piece_dict[x]
+            piece = copy.copy(piece_dict[x])
+
+            board[row][column] =  piece
+            self.piece_pos[piece] = [column,row]
             column += 1
 
         self.board = board
@@ -69,22 +72,34 @@ class chessGame:
             board_view += "\n"
         return board_view
 
-    def gen_moves(self, board):
-        y = 0
-        x = 0
-        for x in board:
+    def gen_moves(self):
+        for x in self.board:
             for piece in x:
                 if type(piece) == King:
-                    gen_king(piece, x, y)
-            x = +1
-        y = +1
+                    moves = self.gen_king(piece)
+        return moves
 
-    def gen_king(self, king: King, posX: int, posY: int):
-        pass
+    # Returns possible moves
+    def gen_king(self, king: King):
+        position = self.piece_pos[king]
+        moves_unculled = [[position[0]-1,position[1]+1], [position[0],position[1]+1], [position[0]+1,position[1]+1],
+                        [position[0]-1,position[1]], [position[0]+1,position[1]], [position[0]-1,position[1]-1],
+                        [position[0],position[1]-1],[position[0]+1,position[1]-1]]
+
+        moves = moves_unculled
+        for move in moves_unculled:
+            if move[0] > 8 or move[0] < 0:
+                moves.remove(move)
+                continue
+            if move[1] > 8 or move[1] < 0:
+                moves.remove(move)
+        
+        print(str(king) + str(moves))
+        return moves
 
 
 game = chessGame()
 game.load_pos("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
 print(game.show_board())
-
+game.gen_moves()
 # make dict of all pieces (key) and there corrosponding locations whichh will be updated when piece class moves
