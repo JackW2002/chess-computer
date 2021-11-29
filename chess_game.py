@@ -8,7 +8,7 @@ class chessGame:
         self.p2_win = False
         self.board = []
         self.piece_pos = {}
-        
+
     # Loads a board with the given FEN string
     def load_pos(self, fen: str):
         # Make empty board to add too
@@ -54,6 +54,9 @@ class chessGame:
                 continue
 
             piece = copy.copy(piece_dict[x])
+
+            if type(piece) == Pawn and (row != 1 or row != 6):
+                piece.has_moved = True
 
             board[row][column] = piece
             self.piece_pos[piece] = [column, row, piece.colour]
@@ -212,7 +215,10 @@ class chessGame:
         while pos_x + distance < 8 and pos_y - distance >= 0:
             # Check if there is a piece in location if there is check colour
             if self.board[pos_y - distance][pos_x + distance]:
-                if self.board[pos_y - distance][pos_x + distance].colour == bishop.colour:
+                if (
+                    self.board[pos_y - distance][pos_x + distance].colour
+                    == bishop.colour
+                ):
                     break
                 valid_moves.append([pos_x + distance, pos_y - distance])
                 break
@@ -223,10 +229,13 @@ class chessGame:
 
         # Check top-left of bishop for valid moves
         distance = 1
-        while pos_x - distance >= 0 and pos_y - distance >=0:
+        while pos_x - distance >= 0 and pos_y - distance >= 0:
             # Check if there is a piece in location if there is check colour
             if self.board[pos_y - distance][pos_x - distance]:
-                if self.board[pos_y - distance][pos_x - distance].colour == bishop.colour:
+                if (
+                    self.board[pos_y - distance][pos_x - distance].colour
+                    == bishop.colour
+                ):
                     break
                 valid_moves.append([pos_x - distance, pos_y - distance])
                 break
@@ -240,7 +249,10 @@ class chessGame:
         while pos_x - distance >= 0 and pos_y + distance < 8:
             # Check if there is a piece in location if there is check colour
             if self.board[pos_y + distance][pos_x - distance]:
-                if self.board[pos_y + distance][pos_x - distance].colour == bishop.colour:
+                if (
+                    self.board[pos_y + distance][pos_x - distance].colour
+                    == bishop.colour
+                ):
                     break
                 valid_moves.append([pos_x - distance, pos_y + distance])
                 break
@@ -254,7 +266,10 @@ class chessGame:
         while pos_y + distance < 8 and pos_x + distance < 8:
             # Check if there is a piece in location if there is check colour
             if self.board[pos_y + distance][pos_x + distance]:
-                if self.board[pos_y + distance][pos_x + distance].colour == bishop.colour:
+                if (
+                    self.board[pos_y + distance][pos_x + distance].colour
+                    == bishop.colour
+                ):
                     break
                 valid_moves.append([pos_x + distance, pos_y + distance])
                 break
@@ -279,35 +294,35 @@ class chessGame:
         if pos_y - 1 >= 0:
             # Check square to right
             if pos_x + 2 < 8:
-                possible_moves.append([pos_x+2, pos_y-1])
+                possible_moves.append([pos_x + 2, pos_y - 1])
             # Check square to left
             if pos_x - 2 >= 0:
-                possible_moves.append([pos_x-2, pos_y-1])
+                possible_moves.append([pos_x - 2, pos_y - 1])
 
             if pos_y - 2 >= 0:
                 # Check square to right
                 if pos_x + 1 < 8:
-                    possible_moves.append([pos_x+1, pos_y-2])
+                    possible_moves.append([pos_x + 1, pos_y - 2])
                 # Check square to left
                 if pos_x - 1 >= 0:
-                    possible_moves.append([pos_x-1, pos_y-2])
+                    possible_moves.append([pos_x - 1, pos_y - 2])
 
         # Check squares below knight
         if pos_y + 1 < 8:
             # Check square to right
             if pos_x + 2 < 8:
-                possible_moves.append([pos_x+2, pos_y+1])
+                possible_moves.append([pos_x + 2, pos_y + 1])
             # Check square to left
             if pos_x - 2 >= 0:
-                possible_moves.append([pos_x-2, pos_y+1])
-            
+                possible_moves.append([pos_x - 2, pos_y + 1])
+
             if pos_y + 2 < 8:
                 # Check square to right
                 if pos_x + 1 < 8:
-                    possible_moves.append([pos_x+1, pos_y+2])
+                    possible_moves.append([pos_x + 1, pos_y + 2])
                 # Check if square to left
                 if pos_x - 1 >= 0:
-                    possible_moves.append([pos_x-1, pos_y+2])
+                    possible_moves.append([pos_x - 1, pos_y + 2])
 
         valid_moves = []
 
@@ -316,20 +331,16 @@ class chessGame:
                 continue
             valid_moves.append(move)
 
-
         print(str(knight) + str(valid_moves))
-
-
-
 
 
 game = chessGame()
 # game.load_pos("rnbqkbnr/ppp1pppp/8/3p4/7P/7R/PPPPPPP1/RNBQKBN1")
-# game.load_pos("8/8/8/2P1r1P1/8/8/4p3/8")
+game.load_pos("8/8/8/2P1r1P1/8/8/4p3/8")
 # game.load_pos("b2B/8/8/8/8/8/8/8")
 # game.load_pos("8/4P3/5BP1/8/4b2n/2p5/8/8")
-# game.load_pos("rn1qkbnr/ppp1pppp/8/3p4/4P1b1/8/PPPP1PPP/RNBQKBNR")
-game.load_pos("n6n/8/8/8/8/8/8/n6n")
+# game.load_pos("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+# game.load_pos("n6n/8/8/8/8/8/8/n6n")
 # game.load_pos("6n1/8/5Q1p/3P4/8/4N3/6b1/8")
 print(game.show_board())
 game.gen_moves()
