@@ -77,12 +77,14 @@ class chessGame:
         moves = 0
         for x in self.board:
             for piece in x:
-                if type(piece) == King:
-                    moves = self.gen_king(piece)
-                if type(piece) == Rook:
-                    moves = self.gen_rook(piece)
-                if type(piece) == Bishop:
-                    moves = self.gen_bishop(piece)
+                # if type(piece) == King:
+                #     moves = self.gen_king(piece)
+                # if type(piece) == Rook:
+                #     moves = self.gen_rook(piece)
+                # if type(piece) == Bishop:
+                #     moves = self.gen_bishop(piece)
+                if type(piece) == Queen:
+                    moves = self.gen_queen(piece)
         return moves
 
     # Returns possible moves
@@ -118,7 +120,10 @@ class chessGame:
 
     def gen_queen(self, queen: Queen):
 
-        position = self.piece_pos[queen]
+        valid_moves = self.gen_rook(queen) + self.gen_bishop(queen)
+
+        return valid_moves
+
 
     def gen_rook(self, rook):
 
@@ -262,7 +267,8 @@ game = chessGame()
 # game.load_pos("rnbqkbnr/ppp1pppp/8/3p4/7P/7R/PPPPPPP1/RNBQKBN1")
 # game.load_pos("8/8/8/2P1r1P1/8/8/4p3/8")
 # game.load_pos("b2B/8/8/8/8/8/8/8")
-game.load_pos("8/4P3/5BP1/8/4b2n/2p5/8/8")
+# game.load_pos("8/4P3/5BP1/8/4b2n/2p5/8/8")
+game.load_pos("rn1qkbnr/ppp1pppp/8/3p4/4P1b1/8/PPPP1PPP/RNBQKBNR")
 print(game.show_board())
 game.gen_moves()
 # make dict of all pieces (key) and there corrosponding locations whichh will be updated when piece class moves
