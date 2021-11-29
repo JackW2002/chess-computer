@@ -169,7 +169,7 @@ class chessGame:
 
         # Check below of rook for valid moves
         distance = 1
-        while pos[1] + distance >= 0:
+        while pos[1] + distance < 8:
             # Check if there is a piece in location if there is check colour
             if self.board[pos[1] + distance][pos[0]]:
                 if self.board[pos[1] + distance][pos[0]].colour == rook.colour:
@@ -181,12 +181,14 @@ class chessGame:
             valid_moves.append([pos[0], pos[1] + distance])
             distance += 1
 
+        print(str(rook) + str(valid_moves))
+
         return valid_moves
 
 
 game = chessGame()
-# game.load_pos("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
-game.load_pos("8/8/8/2P1r1P1/8/8/4p3/8")
+game.load_pos("rnbqkbnr/ppp1pppp/8/3p4/7P/7R/PPPPPPP1/RNBQKBN1")
+#game.load_pos("8/8/8/2P1r1P1/8/8/4p3/8")
 # game.load_pos("b2B/8/8/8/8/8/8/8")
 print(game.show_board())
 print(game.gen_moves())
