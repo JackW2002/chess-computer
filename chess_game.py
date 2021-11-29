@@ -81,6 +81,8 @@ class chessGame:
                     moves = self.gen_king(piece)
                 if type(piece) == Rook:
                     moves = self.gen_rook(piece)
+                if type(piece) == Bishop:
+                    moves = self.gen_bishop(piece)
         return moves
 
     # Returns possible moves
@@ -120,76 +122,147 @@ class chessGame:
 
     def gen_rook(self, rook):
 
-        pos = self.piece_pos[rook]
+        pos_x = self.piece_pos[rook][0]
+
+        pos_y = self.piece_pos[rook][1]
 
         valid_moves = []
 
         distance = 1
 
         # Check right of rook for valid moves
-        while pos[0] + distance < 8:
+        while pos_x + distance < 8:
             # Check if there is a piece in location if there is check colour
-            if self.board[pos[1]][pos[0] + distance]:
-                if self.board[pos[1]][pos[0] + distance].colour == rook.colour:
+            if self.board[pos_y][pos_x + distance]:
+                if self.board[pos_y][pos_x + distance].colour == rook.colour:
                     break
-                valid_moves.append([pos[0] + distance, pos[1]])
+                valid_moves.append([pos_x + distance, pos_y])
                 break
 
             # If no piece on square add to valid and check next
-            valid_moves.append([pos[0] + distance, pos[1]])
+            valid_moves.append([pos_x + distance, pos_y])
             distance += 1
 
         # Check left of rook for valid moves
         distance = 1
-        while pos[0] - distance >= 0:
+        while pos_x - distance >= 0:
             # Check if there is a piece in location if there is check colour
-            if self.board[pos[1]][pos[0] - distance]:
-                if self.board[pos[1]][pos[0] - distance].colour == rook.colour:
+            if self.board[pos_y][pos_x - distance]:
+                if self.board[pos_y][pos_x - distance].colour == rook.colour:
                     break
-                valid_moves.append([pos[0] - distance, pos[1]])
+                valid_moves.append([pos_x - distance, pos_y])
                 break
 
             # If no piece on square add to valid and check next
-            valid_moves.append([pos[0] - distance, pos[1]])
+            valid_moves.append([pos_x - distance, pos_y])
             distance += 1
 
         # Check above of rook for valid moves
         distance = 1
-        while pos[1] - distance >= 0:
+        while pos_y - distance >= 0:
             # Check if there is a piece in location if there is check colour
-            if self.board[pos[1] - distance][pos[0]]:
-                if self.board[pos[1] - distance][pos[0]].colour == rook.colour:
+            if self.board[pos_y - distance][pos_x]:
+                if self.board[pos_y - distance][pos_x].colour == rook.colour:
                     break
-                valid_moves.append([pos[0], pos[1] - distance])
+                valid_moves.append([pos_x, pos_y - distance])
                 break
 
             # If no piece on square add to valid and check next
-            valid_moves.append([pos[0], pos[1] - distance])
+            valid_moves.append([pos_x, pos_y - distance])
             distance += 1
 
         # Check below of rook for valid moves
         distance = 1
-        while pos[1] + distance < 8:
+        while pos_y + distance < 8:
             # Check if there is a piece in location if there is check colour
-            if self.board[pos[1] + distance][pos[0]]:
-                if self.board[pos[1] + distance][pos[0]].colour == rook.colour:
+            if self.board[pos_y + distance][pos_x]:
+                if self.board[pos_y + distance][pos_x].colour == rook.colour:
                     break
-                valid_moves.append([pos[0], pos[1] + distance])
+                valid_moves.append([pos_x, pos_y + distance])
                 break
 
             # If no piece on square add to valid and check next
-            valid_moves.append([pos[0], pos[1] + distance])
+            valid_moves.append([pos_x, pos_y + distance])
             distance += 1
 
         print(str(rook) + str(valid_moves))
 
         return valid_moves
 
+    def gen_bishop(self, bishop):
+
+        pos_x = self.piece_pos[bishop][0]
+
+        pos_y = self.piece_pos[bishop][1]
+
+        valid_moves = []
+
+        distance = 1
+
+        # Check top-right of bishop for valid moves
+        while pos_x + distance < 8 and pos_y - distance >= 0:
+            # Check if there is a piece in location if there is check colour
+            if self.board[pos_y - distance][pos_x + distance]:
+                if self.board[pos_y - distance][pos_x + distance].colour == bishop.colour:
+                    break
+                valid_moves.append([pos_x + distance, pos_y - distance])
+                break
+
+            # If no piece on square add to valid and check next
+            valid_moves.append([pos_x + distance, pos_y - distance])
+            distance += 1
+
+        # Check top-left of bishop for valid moves
+        distance = 1
+        while pos_x - distance >= 0 and pos_y - distance >=0:
+            # Check if there is a piece in location if there is check colour
+            if self.board[pos_y - distance][pos_x - distance]:
+                if self.board[pos_y - distance][pos_x - distance].colour == bishop.colour:
+                    break
+                valid_moves.append([pos_x - distance, pos_y - distance])
+                break
+
+            # If no piece on square add to valid and check next
+            valid_moves.append([pos_x - distance, pos_y - distance])
+            distance += 1
+
+        # Check bottom-left of bishop for valid moves
+        distance = 1
+        while pos_x - distance >= 0 and pos_y + distance < 8:
+            # Check if there is a piece in location if there is check colour
+            if self.board[pos_y + distance][pos_x - distance]:
+                if self.board[pos_y + distance][pos_x - distance].colour == bishop.colour:
+                    break
+                valid_moves.append([pos_x - distance, pos_y + distance])
+                break
+
+            # If no piece on square add to valid and check next
+            valid_moves.append([pos_x - distance, pos_y + distance])
+            distance += 1
+
+        # Check bottom-right of bishop for valid moves
+        distance = 1
+        while pos_y + distance < 8 and pos_x + distance < 8:
+            # Check if there is a piece in location if there is check colour
+            if self.board[pos_y + distance][pos_x + distance]:
+                if self.board[pos_y + distance][pos_x + distance].colour == bishop.colour:
+                    break
+                valid_moves.append([pos_x + distance, pos_y + distance])
+                break
+
+            # If no piece on square add to valid and check next
+            valid_moves.append([pos_x + distance, pos_y + distance])
+            distance += 1
+
+        print(str(bishop) + str(valid_moves))
+
+        return valid_moves
 
 game = chessGame()
-game.load_pos("rnbqkbnr/ppp1pppp/8/3p4/7P/7R/PPPPPPP1/RNBQKBN1")
-#game.load_pos("8/8/8/2P1r1P1/8/8/4p3/8")
+# game.load_pos("rnbqkbnr/ppp1pppp/8/3p4/7P/7R/PPPPPPP1/RNBQKBN1")
+# game.load_pos("8/8/8/2P1r1P1/8/8/4p3/8")
 # game.load_pos("b2B/8/8/8/8/8/8/8")
+game.load_pos("8/4P3/5BP1/8/4b2n/2p5/8/8")
 print(game.show_board())
-print(game.gen_moves())
+game.gen_moves()
 # make dict of all pieces (key) and there corrosponding locations whichh will be updated when piece class moves
