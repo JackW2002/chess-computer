@@ -55,7 +55,7 @@ class chessGame:
 
             piece = copy.copy(piece_dict[x])
 
-            if type(piece) == Pawn and (row != 1 or row != 6):
+            if type(piece) == Pawn and (row != 1 and row != 6):
                 piece.has_moved = True
 
             board[row][column] = piece
@@ -70,9 +70,9 @@ class chessGame:
         for row in self.board:
             for square in row:
                 if square is not None:
-                    board_view += " " + str(square) + " "
+                    board_view += "" + str(square) + " "
                 else:
-                    board_view += " • "
+                    board_view += "• "
             board_view += "\n"
         return board_view
 
@@ -80,16 +80,18 @@ class chessGame:
         moves = 0
         for x in self.board:
             for piece in x:
-                if type(piece) == King:
-                    moves = self.gen_king(piece)
-                if type(piece) == Rook:
-                    moves = self.gen_rook(piece)
-                if type(piece) == Bishop:
-                    moves = self.gen_bishop(piece)
-                if type(piece) == Queen:
-                    moves = self.gen_queen(piece)
-                if type(piece) == Knight:
-                    move = self.gen_knight(piece)
+                # if type(piece) == King:
+                #     moves = self.gen_king(piece)
+                # if type(piece) == Rook:
+                #     moves = self.gen_rook(piece)
+                # if type(piece) == Bishop:
+                #     moves = self.gen_bishop(piece)
+                # if type(piece) == Queen:
+                #     moves = self.gen_queen(piece)
+                # if type(piece) == Knight:
+                #     moves = self.gen_knight(piece)
+                if type(piece) == Pawn:
+                    moves = self.gen_pawn(piece)
         return moves
 
     # Generates moves for kings and returns them in list
@@ -333,15 +335,49 @@ class chessGame:
 
         print(str(knight) + str(valid_moves))
 
+    def gen_pawn(self, pawn):
+        
+        valid_moves = []
+        pos_x = self.piece_pos[pawn][0]
+        pos_y = self.piece_pos[pawn][1]
+        direction = 1
+        opp_colour = 'w'
+
+
+        # Check if pawn can move forwards
+        # Check pawn colour for direction
+        if pawn.colour == 'w':
+            direction = -1
+            opp_colour = 'b'
+        # see if pawn can be pushed
+        if pos_y + direction < 8 and self.board[pos_y + direction][pos_x] == None:
+            valid_moves.append([pos_x, pos_y + direction])
+            # see if pawn can be pushed 2 squares
+            if pos_y + direction < 8 and self.board[pos_y + direction + direction][pos_x] == None and pawn.has_moved == False:
+                valid_moves.append([pos_x, pos_y + direction + direction])
+
+        # Check if pawn can take right
+        if [pos_x+1,pos_y+direction,opp_colour] in self.piece_pos.values():
+            valid_moves.append([pos_x+1,pos_y+direction])
+        # Check if pawn can take right
+        if [pos_x-1,pos_y+direction,opp_colour] in self.piece_pos.values():
+            valid_moves.append([pos_x-1,pos_y+direction])
+
+    
+
+        print(str(pawn) + "location: " + str([pos_x,pos_y]) + " moves: " + str(valid_moves))
+        return valid_moves
+
 
 game = chessGame()
 # game.load_pos("rnbqkbnr/ppp1pppp/8/3p4/7P/7R/PPPPPPP1/RNBQKBN1")
-game.load_pos("8/8/8/2P1r1P1/8/8/4p3/8")
+# game.load_pos("8/8/8/2P1r1P1/8/8/4p3/8")
 # game.load_pos("b2B/8/8/8/8/8/8/8")
 # game.load_pos("8/4P3/5BP1/8/4b2n/2p5/8/8")
 # game.load_pos("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
 # game.load_pos("n6n/8/8/8/8/8/8/n6n")
 # game.load_pos("6n1/8/5Q1p/3P4/8/4N3/6b1/8")
+game.load_pos("rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR")
 print(game.show_board())
 game.gen_moves()
 # make dict of all pieces (key) and there corrosponding locations whichh will be updated when piece class moves

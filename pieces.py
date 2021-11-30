@@ -56,6 +56,7 @@ class Pawn(Piece):
     def __init__(self, colour):
         self.colour = colour
         self.has_moved = False
+        self.en_passant = False
 
     def __str__(self):
         if self.colour == "w":
