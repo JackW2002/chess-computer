@@ -9,6 +9,7 @@ class chessGame:
         self.p2_win = False
         self.board = []
         self.piece_pos = {}
+        self.en_pass = []
 
     # Loads a board with the given FEN string
     def load_pos(self, fen: str):
@@ -343,6 +344,8 @@ class chessGame:
 
         print(str(knight) + str(valid_moves))
 
+        return valid_moves
+
     # Generates moves for pawns and returns them in list
     def gen_pawn(self, pawn):
 
@@ -375,6 +378,15 @@ class chessGame:
         if [pos_x - 1, pos_y + direction, opp_colour] in self.piece_pos.values():
             valid_moves.append([pos_x - 1, pos_y + direction])
 
+
+        if self.board[pos_y][pos_x+1] != None:
+            if  self.board[pos_y][pos_x+1].en_passant:
+                valid_moves.append([pos_x+1,pos_y-1]) 
+
+            if self.board[pos_y][pos_x-1] != None:
+                if self.board[pos_y][pos_x-1].en_passant:
+                    valid_moves.append([pos_x-1,pos_y-1]) 
+
         print(
             str(pawn)
             + "location: "
@@ -394,29 +406,30 @@ class chessGame:
     # Player 1 enter move
     def p1_move(self):
         print(self.show_board())
+        print(str(self.en_pass))
         print("P1: input move")
         str_p1_move = input("")
         p1_piece_pos = [int(str_p1_move[0]), int(str_p1_move[2])]
         p1_piece = self.board[p1_piece_pos[1]][p1_piece_pos[0]]
         p1_move = [int(str_p1_move[4]), int(str_p1_move[6])]
-        if self.valiate_move(p1_piece, p1_move):
-            self.move(p1_piece, p1_move)
-        print("ERROR RE-ENTER MOVE")
-        self.p1_move()
+        if not self.valiate_move(p1_piece, p1_move):
+            print("ERROR RE-ENTER MOVE")
+            self.p1_move()
+        self.move(p1_piece, p1_move)
 
     # Player 2 enter move
     def p2_move(self):
         print(self.show_board())
+        print(str(self.en_pass))
         print("P2: input move")
         str_p2_move = input("")
         p2_piece_pos = [int(str_p2_move[0]), int(str_p2_move[2])]
         p2_piece = self.board[p2_piece_pos[1]][p2_piece_pos[0]]
         p2_move = [int(str_p2_move[4]), int(str_p2_move[6])]
+        if not self.valiate_move(p2_piece, p2_move):
+            print("ERROR RE-ENTER MOVE")
+            self.p2_move()
         self.move(p2_piece, p2_move)
-        if self.valiate_move(p2_piece, p2_move):
-            self.move(p2_piece, p2_move)
-        print("ERROR RE-ENTER MOVE")
-        self.p2_move()
 
     # Checks weather move entered is valid
     def valiate_move(self, piece, move):
@@ -434,6 +447,7 @@ class chessGame:
             valid_moves = self.gen_knight(piece)
         if type(piece) == Pawn:
             valid_moves = self.gen_pawn(piece)
+
         if move not in valid_moves:
             return False
         return True
@@ -442,11 +456,31 @@ class chessGame:
     def move(self, piece, pos):
 
         origional_pos = self.piece_pos[piece]
+        dead_piece = self.board[pos[1]][pos[0]]
         self.board[pos[1]][pos[0]] = piece
-
+        if dead_piece != None:
+            del self.piece_pos[dead_piece]
         new_pos = {piece: [pos[0], pos[1], piece.colour]}
         self.piece_pos.update(new_pos)
         self.board[origional_pos[1]][origional_pos[0]] = None
+
+
+        for pawn in self.en_pass:
+            pawn.en_passant = False
+        self.en_pass = []
+        if type(piece) == Pawn:
+            piece.has_moved = True
+            if origional_pos[0] != pos[0]:
+                if piece.colour == 'w':
+                    del self.piece_pos[self.board[pos[1]+1][pos[0]]]
+                    self.board[pos[1]+1][pos[0]] = None
+                if piece.colour == 'b':
+                    del self.piece_pos[self.board[pos[1]-1][pos[0]]]
+                    self.board[pos[1]-1][pos[0]] = None
+            if abs(origional_pos[1] - pos[1]) == 2:
+                piece.en_passant = True
+                self.en_pass.append(piece)
+
 
 
 game = chessGame()
